@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CHOCOLATEMPO</title>
+  <link rel="icon" href="./assets/logo.jpg" type="image/jpeg">
+  <link rel="shortcut icon" href="./assets/logo.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --primary: #4a2c2a;
+      --secondary: #d4a55d;
+      --accent: #7b3f00;
+      --light: #f9f5f0;
+      --white: #ffffff;
+      --gray: #6c757d;
+      --success: #28a745;
+      --danger: #e74c3c;
+    }
+
+    body {
+      background: var(--light);
+      color: var(--primary);
+      min-height: 100vh;
+    }
+
+    .header-wrapper {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      box-shadow: 0 4px 20px rgba(74, 44, 42, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(212, 165, 93, 0.4);
+      transition: all 0.3s ease;
+      overflow: hidden;
+      background: var(--white);
+      border: 3px solid var(--primary);
+      /* Borda marrom elegante */
+      padding: 2px;
+      /* Espaço entre borda e imagem */
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+      border-color: var(--accent);
+      /* Muda cor no hover */
+      box-shadow: 0 6px 20px rgba(212, 165, 93, 0.6);
+    }
+
+    .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .brand-text h1 {
+      color: var(--white);
+      margin-bottom: 2px;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .brand-text .slogan {
+      font-size: 0.85rem;
+      color: var(--secondary);
+      font-weight: 500;
+    }
+
+    .nav {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .nav a:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .nav a.active {
+      background: var(--secondary);
+      color: var(--primary);
+      box-shadow: 0 4px 12px rgba(212, 165, 93, 0.3);
+    }
+
+    .menu-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      position: relative;
+    }
+
+    .user-welcome {
+      color: var(--white);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .cart-badge {
+      background: var(--secondary);
+      color: var(--primary);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .hero-card {
+      background: var(--white);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(212, 165, 93, 0.2);
+    }
+
+    .hero-card h2 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .hero-card h3 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .hero-card p {
+      color: var(--gray);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .search {
+      display: flex;
+      gap: 10px;
+    }
+
+    .search input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 2px solid #e9ecef;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .search input:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(212, 165, 93, 0.1);
+    }
+
+    .search button {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+    .search button:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .filter-row select {
+      flex: 1;
+      min-width: 150px;
+      padding: 12px 15px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      background: var(--white);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .filter-row select:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(212, 165, 93, 0.1);
+    }
+
+    .clear-filters {
+      background: none;
+      border: none;
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
+      transition: color 0.3s ease;
+    }
+
+    .clear-filters:hover {
+      color: var(--primary);
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(212, 165, 93, 0.4);
+      transition: transform 0.3s ease;
+      overflow: hidden;
+      /* Importante para imagem */
+    }
+
+    .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* ou 'contain' dependendo da sua logo */
+      border-radius: 50%;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      border: 1px solid rgba(212, 165, 93, 0.1);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover .card-img img {
+      transform: scale(1.05);
+    }
+
+    .badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: linear-gradient(135deg, var(--success), #1e7e34);
+      color: var(--white);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card-content {
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card h3 {
+      color: var(--primary);
+      margin-bottom: 8px;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .card p {
+      color: var(--gray);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+
+    .price {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 15px;
+    }
+
+    .card button {
+      width: 100%;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .card button:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .footer {
+      background: var(--primary);
+      color: var(--white);
+      padding: 30px 20px;
+      border-radius: 12px;
+      margin-top: 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer .small {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content {
+      background: var(--white);
+      padding: 30px;
+      border-radius: 16px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      animation: slideUp 0.3s ease;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+
+    .modal-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      flex: 1;
+    }
+
+    .modal-btn.primary {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .modal-btn.secondary {
+      background: var(--light);
+      color: var(--primary);
+    }
+
+    .modal-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--success);
+      color: var(--white);
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      z-index: 3000;
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    .toast.error {
+      background: var(--danger);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+      }
+
+      .nav {
+        justify-content: center;
+      }
+
+      .brand {
+        justify-content: center;
+        text-align: center;
+      }
+
+      .footer {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .modal-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header-wrapper">
+    <div class="header">
+      <div class="brand">
+        <div class="logo">
+          <img src="./assets/logo.jpg" alt="CHOCOLATEMPO" class="logo-img">
+        </div>
+        <div class="brand-text">
+          <h1>CHOCOLATEMPO</h1>
+          <div class="slogan">Os melhores chocolates da região!</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="cliente.html" class="active"><i class="fas fa-home"></i>Home</a>
+        <a href="carrinho_cliente.html" class="cart-link">
+          <i class="fas fa-shopping-cart"></i>Carrinho
+          <div class="cart-badge" id="cartBadge" style="display: none;">0</div>
+        </a>
+      </nav>
+      <div class="menu-right">
+        <div class="user-welcome">Olá, Cliente!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <section class="hero">
+      <div class="hero-card">
+        <h2>Bem-vindo ao CHOCOLATEMPO</h2>
+        <p>A sua loja de chocolates artesanais, navegue pelos nossos produtos e prepare-se para adoçar o dia. Mais de 50
+          variedades de chocolates finos esperam por você!</p>
+        <div class="search">
+          <input type="text" id="searchInput" placeholder="Buscar produtos, sabor, categoria..." />
+          <button onclick="buscarProdutos()"><i class="fas fa-search"></i></button>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <h3>Filtros Rápidos</h3>
+        <div class="filter-row">
+          <select id="categoriaFilter" onchange="filtrarProdutos()">
+            <option value="">Todas Categorias</option>
+            <option value="Trufas">Trufas</option>
+            <option value="Tabletes">Tabletes</option>
+            <option value="Bombons">Bombons</option>
+            <option value="Box">Box Presente</option>
+          </select>
+          <select id="precoFilter" onchange="filtrarProdutos()">
+            <option value="">Todos os Preços</option>
+            <option value="0-10">R$ 0 - 10</option>
+            <option value="10-30">R$ 10 - 30</option>
+            <option value="30+">R$ 30+</option>
+          </select>
+        </div>
+        <button class="clear-filters" onclick="limparFiltros()">
+          <i class="fas fa-times"></i> Limpar filtros
+        </button>
+      </aside>
+    </section>
+
+    <section>
+      <h2 style="margin:0 0 25px 0">Nossos Produtos</h2>
+      <div class="grid" id="produtosGrid">
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div>
+        <div class="small">CHOCOLATEMPO • Avenida Nereu Ramos, 156 E — Chapecó/SC</div>
+        <div class="small">contato@chocolatetempo.com.br • (49) 9 8836-3000</div>
+      </div>
+      <div class="small">© 2025 CHOCOLATEMPO — Todos os direitos reservados</div>
+    </footer>
+  </div>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <h3>🎉 Produto adicionado ao carrinho!</h3>
+      <p>O item foi adicionado com sucesso ao seu carrinho.</p>
+      <div class="modal-buttons">
+        <button onclick="irCarrinho()" class="modal-btn primary">Ir para o Carrinho</button>
+        <button onclick="fecharModal()" class="modal-btn secondary">Continuar Comprando</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalProduto" class="modal">
+    <div class="modal-content" style="max-width: 500px; text-align: left;">
+      <span class="close" onclick="fecharModalProduto()"
+        style="float: right; cursor: pointer; font-size: 1.5rem;">&times;</span>
+      <div id="produtoConteudo"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMessage">Operação realizada com sucesso!</span>
+  </div>
+
+  <script>
+    const produtos = [
+      {
+        id: 1,
+        nome: "Trufa Clássica",
+        preco: 8.90,
+        categoria: "Trufas",
+        descricao: "Trufa artesanal de chocolate ao leite — macia e aveludada. Perfeita para momentos especiais.",
+        imagem: "./assets/trufaclassica.png",
+        maisVendido: true
+      },
+      {
+        id: 2,
+        nome: "Tablete 70% Cacau",
+        preco: 12.50,
+        categoria: "Tabletes",
+        descricao: "Intensidade e notas frutadas. Para paladares exigentes que apreciam o verdadeiro chocolate.",
+        imagem: "./assets/tablete70cacau.png",
+        maisVendido: false
+      },
+      {
+        id: 3,
+        nome: "Bombom Caramelo",
+        preco: 6.50,
+        categoria: "Bombons",
+        descricao: "Recheio cremoso com toque de flor de sal. Uma explosão de sabor a cada mordida.",
+        imagem: "./assets/trufacaramelo.jpg",
+        maisVendido: true
+      },
+      {
+        id: 4,
+        nome: "Chocolate Branco",
+        preco: 9.90,
+        categoria: "Tabletes",
+        descricao: "O clássico chocolate branco, suave e cremoso. Ideal para quem prefere sabores mais doces.",
+        imagem: "./assets/chocolatebranco.jpg",
+        maisVendido: false
+      },
+      {
+        id: 5,
+        nome: "Trufa Bela",
+        preco: 9.50,
+        categoria: "Trufas",
+        descricao: "Trufa de chocolate branco com raspas de limão. Refrescante e sofisticada.",
+        imagem: "./assets/trufabela.png",
+        maisVendido: false
+      },
+      {
+        id: 6,
+        nome: "Box 6 Sortidos",
+        preco: 49.90,
+        categoria: "Box",
+        descricao: "Seleção especial — presente perfeito. 6 unidades dos nossos melhores chocolates.",
+        imagem: "./assets/box6sortidos.jpg",
+        maisVendido: true
+      },
+      {
+        id: 7,
+        nome: "Tablete Ao Leite",
+        preco: 7.90,
+        categoria: "Tabletes",
+        descricao: "Chocolate clássico, cremoso e reconfortante. O preferido das crianças.",
+        imagem: "./assets/tabletechocolate.png",
+        maisVendido: false
+      },
+      {
+        id: 8,
+        nome: "Bombom Amendoim",
+        preco: 5.90,
+        categoria: "Bombons",
+        descricao: "Crocância e doçura na medida certa. Textura única que derrete na boca.",
+        imagem: "./assets/bombomamendoim.png",
+        maisVendido: false
+      }
+    ];
+
+    document.addEventListener('DOMContentLoaded', function () {
+      carregarProdutos();
+      atualizarBadgeCarrinho();
+
+      document.getElementById('searchInput').addEventListener('input', function () {
+        filtrarProdutos();
+      });
+    });
+
+    function carregarProdutos() {
+      const grid = document.getElementById('produtosGrid');
+
+      grid.innerHTML = produtos.map(produto => `
+        <div class="card" data-categoria="${produto.categoria}" data-preco="${produto.preco}" data-nome="${produto.nome.toLowerCase()}">
+          ${produto.maisVendido ? '<div class="badge">Mais Vendido</div>' : ''}
+          <div class="card-img">
+            <img src="${produto.imagem}" alt="${produto.nome}" onclick="abrirDetalhesProduto(${produto.id})">
+          </div>
+          <div class="card-content">
+            <h3>${produto.nome}</h3>
+            <p>${produto.descricao}</p>
+            <div class="price">R$ ${produto.preco.toFixed(2)}</div>
+            <button onclick="adicionarAoCarrinho(${produto.id})">
+              <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function buscarProdutos() {
+      filtrarProdutos();
+    }
+
+    function filtrarProdutos() {
+      const termo = document.getElementById('searchInput').value.toLowerCase();
+      const categoria = document.getElementById('categoriaFilter').value;
+      const preco = document.getElementById('precoFilter').value;
+
+      const cards = document.querySelectorAll('.card');
+      let produtosVisiveis = 0;
+
+      cards.forEach(card => {
+        const nome = card.dataset.nome;
+        const categoriaCard = card.dataset.categoria;
+        const precoCard = parseFloat(card.dataset.preco);
+
+        const matchTermo = nome.includes(termo);
+        const matchCategoria = !categoria || categoriaCard === categoria;
+        const matchPreco = !preco || (
+          preco === '0-10' ? precoCard <= 10 :
+            preco === '10-30' ? precoCard > 10 && precoCard <= 30 :
+              preco === '30+' ? precoCard > 30 : true
+        );
+
+        if (matchTermo && matchCategoria && matchPreco) {
+          card.style.display = 'block';
+          produtosVisiveis++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function limparFiltros() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('categoriaFilter').value = '';
+      document.getElementById('precoFilter').value = '';
+
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        card.style.display = 'block';
+      });
+    }
+
+    function adicionarAoCarrinho(produtoId) {
+      const produto = produtos.find(p => p.id === produtoId);
+      let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+
+      const itemExistente = carrinho.find(item => item.id === produtoId);
+
+      if (itemExistente) {
+        itemExistente.quantidade += 1;
+      } else {
+        carrinho.push({
+          id: produto.id,
+          nome: produto.nome,
+          preco: produto.preco,
+          imagem: produto.imagem,
+          quantidade: 1
+        });
+      }
+
+      localStorage.setItem('carrinho', JSON.stringify(carrinho));
+      atualizarBadgeCarrinho();
+      mostrarModal();
+      mostrarToast(`${produto.nome} adicionado ao carrinho!`);
+    }
+
+    function atualizarBadgeCarrinho() {
+      const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+      const totalItens = carrinho.reduce((total, item) => total + item.quantidade, 0);
+      const badge = document.getElementById('cartBadge');
+
+      if (totalItens > 0) {
+        badge.textContent = totalItens;
+        badge.style.display = 'flex';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+
+    function mostrarModal() {
+      document.getElementById('modal').style.display = 'flex';
+    }
+
+    function fecharModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+
+    function irCarrinho() {
+      window.location.href = 'carrinho_cliente.html';
+    }
+
+    function abrirDetalhesProduto(produtoId) {
+      const produto = produtos.find(p => p.id === produtoId);
+
+      document.getElementById('produtoConteudo').innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start;">
+          <div>
+            <img src="${produto.imagem}" alt="${produto.nome}" style="width: 100%; border-radius: 8px;">
+          </div>
+          <div>
+            <h2 style="margin-bottom: 10px;">${produto.nome}</h2>
+            <div class="price" style="font-size: 1.5rem; margin-bottom: 15px;">R$ ${produto.preco.toFixed(2)}</div>
+            <p style="margin-bottom: 20px; color: var(--gray);">${produto.descricao}</p>
+            <div style="margin-bottom: 20px;">
+              <strong>Categoria:</strong> ${produto.categoria}
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button onclick="adicionarAoCarrinho(${produto.id}); fecharModalProduto();" 
+                      style="flex: 1; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer;">
+                <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('modalProduto').style.display = 'flex';
+    }
+
+    function fecharModalProduto() {
+      document.getElementById('modalProduto').style.display = 'none';
+    }
+
+    function mostrarToast(mensagem, tipo = 'success') {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+
+      toastMessage.textContent = mensagem;
+      toast.className = `toast ${tipo}`;
+      toast.classList.add('show');
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    window.onclick = function (event) {
+      const modal = document.getElementById('modal');
+      const modalProduto = document.getElementById('modalProduto');
+
+      if (event.target === modal) {
+        fecharModal();
+      }
+      if (event.target === modalProduto) {
+        fecharModalProduto();
+      }
+    }
+  </script>
+</body>
+
+</html>

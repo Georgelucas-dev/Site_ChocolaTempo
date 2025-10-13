@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CHOCOLATEMPO — Cadastro de Fornecedores</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="icon" href="./assets/logo.jpg" type="image/jpeg">
+  <style>
+    :root {
+      --primary: #4a2c2a;
+      --secondary: #d4a55d;
+      --accent: #7b3f00;
+      --light: #f9f5f0;
+      --white: #ffffff;
+      --gray: #6c757d;
+      --success: #28a745;
+      --danger: #e74c3c;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: var(--light);
+      color: var(--primary);
+      min-height: 100vh;
+    }
+
+    .header-wrapper {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      box-shadow: 0 4px 20px rgba(74, 44, 42, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, var(--secondary), #e8c48e);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(212, 165, 93, 0.4);
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .brand-text h1 {
+      color: var(--white);
+      margin-bottom: 2px;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .brand-text .slogan {
+      font-size: 0.85rem;
+      color: var(--secondary);
+      font-weight: 500;
+    }
+
+    .nav {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .nav a:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .nav a.active {
+      background: var(--secondary);
+      color: var(--primary);
+      box-shadow: 0 4px 12px rgba(212, 165, 93, 0.3);
+    }
+
+    .menu-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .user-welcome {
+      color: var(--white);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    .cadastro-container {
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: var(--white);
+      padding: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .page-header h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: var(--secondary);
+      color: var(--primary);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .fornecedores-section {
+      padding: 30px;
+    }
+
+    .section-title {
+      color: var(--primary);
+      margin-bottom: 25px;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .fornecedores-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .fornecedor-card {
+      background: var(--light);
+      border-radius: 8px;
+      padding: 20px;
+      border: 1px solid rgba(212, 165, 93, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .fornecedor-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .fornecedor-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+      color: var(--primary);
+      border: 2px solid var(--secondary);
+    }
+
+    .fornecedor-info h4 {
+      color: var(--primary);
+      margin-bottom: 8px;
+      font-size: 1.2rem;
+    }
+
+    .fornecedor-metadata {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 15px;
+    }
+
+    .fornecedor-metadata span {
+      font-size: 0.85rem;
+      color: var(--primary);
+    }
+
+    .fornecedor-acoes {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-action {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+    }
+
+    .btn-action:hover {
+      background: var(--accent);
+    }
+
+    .btn-action.edit {
+      background: var(--success);
+    }
+
+    .btn-action.delete {
+      background: var(--danger);
+    }
+
+    .form-section {
+      padding: 30px;
+      border-top: 2px solid var(--light);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e9ecef;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--secondary);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .btn-submit {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-submit:hover {
+      background: var(--accent);
+    }
+
+    .btn-cancel {
+      background: var(--gray);
+      color: var(--white);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-cancel:hover {
+      background: #5a6268;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      color: var(--secondary);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: var(--white);
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray);
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .fornecedores-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .page-header {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-wrapper">
+    <div class="header">
+      <div class="brand">
+        <div class="logo">🚚</div>
+        <div class="brand-text">
+          <h1>CHOCOLATEMPO</h1>
+          <div class="slogan">Cadastro de Fornecedores</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="cadastro_produto.html"><i class="fas fa-cookie"></i> Produtos</a>
+        <a href="cadastro_motoboy.html"><i class="fas fa-motorcycle"></i> Motoboys</a>
+        <a href="cadastro_fornecedor.html" class="active"><i class="fas fa-truck"></i> Fornecedores</a>
+        <a href="relatorios.html"><i class="fas fa-chart-line"></i> Relatórios</a>
+        <a href="carrinho.html"><i class="fas fa-shopping-cart"></i> Carrinho</a>
+      </nav>
+      <div class="menu-right">
+        <div class="user-welcome">Olá, Admin</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="cadastro-container">
+      <div class="page-header">
+        <h2><i class="fas fa-truck"></i> Gerenciar Fornecedores</h2>
+        <button class="btn-primary" onclick="mostrarFormulario()">
+          <i class="fas fa-plus"></i> Novo Fornecedor
+        </button>
+      </div>
+
+      <!-- Lista de Fornecedores Cadastrados -->
+      <div class="fornecedores-section">
+        <h3 class="section-title"><i class="fas fa-list"></i> Fornecedores Cadastrados</h3>
+        <div id="lista-fornecedores" class="fornecedores-grid">
+          <!-- Os fornecedores serão carregados aqui -->
+        </div>
+      </div>
+
+      <!-- Formulário de Cadastro -->
+      <div id="form-section" class="form-section" style="display: none;">
+        <h3 class="section-title"><i class="fas fa-plus-circle"></i> Cadastrar Novo Fornecedor</h3>
+        
+        <form id="form-fornecedor">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="empresa">Nome da Empresa *</label>
+              <input type="text" id="empresa" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="cnpj">CNPJ *</label>
+              <input type="text" id="cnpj" class="form-control" placeholder="00.000.000/0000-00" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="telefone">Telefone *</label>
+              <input type="tel" id="telefone" class="form-control" placeholder="(00) 00000-0000" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" class="form-control" placeholder="empresa@exemplo.com" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="produto">Produto Fornecido *</label>
+            <input type="text" id="produto" class="form-control" placeholder="Ex: Chocolate 70% cacau" required>
+          </div>
+
+          <div class="form-group">
+            <label for="endereco">Endereço</label>
+            <input type="text" id="endereco" class="form-control" placeholder="Endereço completo">
+          </div>
+          
+          <div class="form-actions">
+            <button type="submit" class="btn-submit">
+              <i class="fas fa-save"></i> Cadastrar Fornecedor
+            </button>
+            <button type="button" class="btn-cancel" onclick="ocultarFormulario()">
+              <i class="fas fa-times"></i> Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-editar" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-edit"></i> Editar Fornecedor</h3>
+        <button class="modal-close" onclick="fecharModal()">&times;</button>
+      </div>
+      <form id="form-editar">
+        <input type="hidden" id="editar-id">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editar-empresa">Nome da Empresa *</label>
+            <input type="text" id="editar-empresa" class="form-control" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="editar-cnpj">CNPJ *</label>
+            <input type="text" id="editar-cnpj" class="form-control" placeholder="00.000.000/0000-00" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editar-telefone">Telefone *</label>
+            <input type="tel" id="editar-telefone" class="form-control" placeholder="(00) 00000-0000" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="editar-email">Email *</label>
+            <input type="email" id="editar-email" class="form-control" placeholder="empresa@exemplo.com" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="editar-produto">Produto Fornecido *</label>
+          <input type="text" id="editar-produto" class="form-control" placeholder="Ex: Chocolate 70% cacau" required>
+        </div>
+
+        <div class="form-group">
+          <label for="editar-endereco">Endereço</label>
+          <input type="text" id="editar-endereco" class="form-control" placeholder="Endereço completo">
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-save"></i> Salvar Alterações
+          </button>
+          <button type="button" class="btn-cancel" onclick="fecharModal()">
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const fornecedoresPadrao = [
+      {
+        id: 1,
+        empresa: "Cacau Brasil",
+        cnpj: "12.345.678/0001-90",
+        telefone: "(11) 99999-1234",
+        email: "contato@cacaubrasil.com.br",
+        produto: "Cacau em pó premium",
+        endereco: "Rua das Amêndoas, 123 - São Paulo/SP"
+      },
+      {
+        id: 2,
+        empresa: "ChocoMine",
+        cnpj: "23.456.789/0001-01",
+        telefone: "(21) 98888-5678",
+        email: "vendas@chocomine.com.br",
+        produto: "Chocolate amargo 70%",
+        endereco: "Avenida do Cacau, 456 - Rio de Janeiro/RJ"
+      },
+      {
+        id: 3,
+        empresa: "Doce Sabor",
+        cnpj: "34.567.890/0001-12",
+        telefone: "(31) 97777-9012",
+        email: "sac@docesabor.com.br",
+        produto: "Chocolate ao leite",
+        endereco: "Praça dos Doces, 789 - Belo Horizonte/MG"
+      },
+      {
+        id: 4,
+        empresa: "Cacau Premium",
+        cnpj: "45.678.901/0001-23",
+        telefone: "(41) 96666-3456",
+        email: "comercial@cacaupremium.com.br",
+        produto: "Cacau orgânico",
+        endereco: "Alameda das Frutas, 321 - Curitiba/PR"
+      },
+      {
+        id: 5,
+        empresa: "ChocoArte",
+        cnpj: "56.789.012/0001-34",
+        telefone: "(51) 95555-7890",
+        email: "atendimento@chocoarte.com.br",
+        produto: "Chocolate branco",
+        endereco: "Travessa dos Sabores, 654 - Porto Alegre/RS"
+      }
+    ];
+
+    document.addEventListener('DOMContentLoaded', function() {
+      inicializarFornecedores();
+      carregarFornecedores();
+      inicializarMascaras();
+    });
+
+    function inicializarFornecedores() {
+      const fornecedoresExistentes = JSON.parse(localStorage.getItem('fornecedores'));
+      if (!fornecedoresExistentes || fornecedoresExistentes.length === 0) {
+        localStorage.setItem('fornecedores', JSON.stringify(fornecedoresPadrao));
+      }
+    }
+
+    function inicializarMascaras() {
+      document.getElementById('cnpj').addEventListener('input', function(e) {
+        e.target.value = formatarCNPJ(e.target.value);
+      });
+
+      document.getElementById('editar-cnpj').addEventListener('input', function(e) {
+        e.target.value = formatarCNPJ(e.target.value);
+      });
+
+      document.getElementById('telefone').addEventListener('input', function(e) {
+        e.target.value = formatarTelefone(e.target.value);
+      });
+
+      document.getElementById('editar-telefone').addEventListener('input', function(e) {
+        e.target.value = formatarTelefone(e.target.value);
+      });
+    }
+
+    function formatarCNPJ(cnpj) {
+      cnpj = cnpj.replace(/\D/g, '');
+      cnpj = cnpj.replace(/^(\d{2})(\d)/, '$1.$2');
+      cnpj = cnpj.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+      cnpj = cnpj.replace(/\.(\d{3})(\d)/, '.$1/$2');
+      cnpj = cnpj.replace(/(\d{4})(\d)/, '$1-$2');
+      return cnpj.substring(0, 18);
+    }
+
+    function formatarTelefone(tel) {
+      tel = tel.replace(/\D/g, '');
+      tel = tel.replace(/(\d{2})(\d)/, '($1) $2');
+      tel = tel.replace(/(\d{5})(\d)/, '$1-$2');
+      return tel.substring(0, 15);
+    }
+
+    // Carregar fornecedores
+    function carregarFornecedores() {
+      const fornecedores = JSON.parse(localStorage.getItem('fornecedores')) || [];
+      const lista = document.getElementById('lista-fornecedores');
+      lista.innerHTML = '';
+
+      if (fornecedores.length === 0) {
+        lista.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-truck"></i>
+            <h3>Nenhum fornecedor cadastrado</h3>
+            <p>Clique em "Novo Fornecedor" para adicionar o primeiro fornecedor.</p>
+          </div>
+        `;
+        return;
+      }
+
+      fornecedores.forEach(fornecedor => {
+        const fornecedorCard = document.createElement('div');
+        fornecedorCard.className = 'fornecedor-card';
+        fornecedorCard.innerHTML = `
+          <div class="fornecedor-icon">
+            <i class="fas fa-truck"></i>
+          </div>
+          <div class="fornecedor-info">
+            <h4>${fornecedor.empresa}</h4>
+            <div class="fornecedor-metadata">
+              <span><strong>CNPJ:</strong> ${fornecedor.cnpj}</span>
+              <span><strong>Telefone:</strong> ${fornecedor.telefone}</span>
+              <span><strong>Email:</strong> ${fornecedor.email}</span>
+              <span><strong>Produto:</strong> ${fornecedor.produto}</span>
+              ${fornecedor.endereco ? `<span><strong>Endereço:</strong> ${fornecedor.endereco}</span>` : ''}
+            </div>
+          </div>
+          <div class="fornecedor-acoes">
+            <button class="btn-action edit" onclick="editarFornecedor(${fornecedor.id})">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button class="btn-action delete" onclick="excluirFornecedor(${fornecedor.id})">
+              <i class="fas fa-trash"></i> Excluir
+            </button>
+          </div>
+        `;
+        lista.appendChild(fornecedorCard);
+      });
+    }
+
+    // Mostrar/ocultar formulário
+    function mostrarFormulario() {
+      document.getElementById('form-section').style.display = 'block';
+      document.getElementById('form-fornecedor').reset();
+    }
+
+    function ocultarFormulario() {
+      document.getElementById('form-section').style.display = 'none';
+    }
+
+    // Cadastrar novo fornecedor
+    document.getElementById('form-fornecedor').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const empresa = document.getElementById('empresa').value;
+      const cnpj = document.getElementById('cnpj').value;
+      const telefone = document.getElementById('telefone').value;
+      const email = document.getElementById('email').value;
+      const produto = document.getElementById('produto').value;
+      const endereco = document.getElementById('endereco').value;
+      
+      if (!empresa || !cnpj || !telefone || !email || !produto) {
+        alert('Por favor, preencha todos os campos obrigatórios.');
+        return;
+      }
+      
+      const fornecedor = {
+        id: Date.now(),
+        empresa,
+        cnpj,
+        telefone,
+        email,
+        produto,
+        endereco
+      };
+      
+      salvarFornecedor(fornecedor);
+      adicionarFornecedorNaLista(fornecedor);
+      
+      this.reset();
+      ocultarFormulario();
+      
+      alert('Fornecedor cadastrado com sucesso!');
+    });
+
+    function salvarFornecedor(fornecedor) {
+      let fornecedores = JSON.parse(localStorage.getItem('fornecedores')) || [];
+      fornecedores.push(fornecedor);
+      localStorage.setItem('fornecedores', JSON.stringify(fornecedores));
+    }
+
+    function adicionarFornecedorNaLista(fornecedor) {
+      const lista = document.getElementById('lista-fornecedores');
+      const emptyState = lista.querySelector('.empty-state');
+      
+      if (emptyState) {
+        emptyState.remove();
+      }
+      
+      const fornecedorCard = document.createElement('div');
+      fornecedorCard.className = 'fornecedor-card';
+      fornecedorCard.innerHTML = `
+        <div class="fornecedor-icon">
+          <i class="fas fa-truck"></i>
+        </div>
+        <div class="fornecedor-info">
+          <h4>${fornecedor.empresa}</h4>
+          <div class="fornecedor-metadata">
+            <span><strong>CNPJ:</strong> ${fornecedor.cnpj}</span>
+            <span><strong>Telefone:</strong> ${fornecedor.telefone}</span>
+            <span><strong>Email:</strong> ${fornecedor.email}</span>
+            <span><strong>Produto:</strong> ${fornecedor.produto}</span>
+            ${fornecedor.endereco ? `<span><strong>Endereço:</strong> ${fornecedor.endereco}</span>` : ''}
+          </div>
+        </div>
+        <div class="fornecedor-acoes">
+          <button class="btn-action edit" onclick="editarFornecedor(${fornecedor.id})">
+            <i class="fas fa-edit"></i> Editar
+          </button>
+          <button class="btn-action delete" onclick="excluirFornecedor(${fornecedor.id})">
+            <i class="fas fa-trash"></i> Excluir
+          </button>
+        </div>
+      `;
+      
+      lista.appendChild(fornecedorCard);
+    }
+
+    // Editar fornecedor
+    function editarFornecedor(id) {
+      const fornecedores = JSON.parse(localStorage.getItem('fornecedores')) || [];
+      const fornecedor = fornecedores.find(f => f.id === id);
+      
+      if (fornecedor) {
+        document.getElementById('editar-id').value = fornecedor.id;
+        document.getElementById('editar-empresa').value = fornecedor.empresa;
+        document.getElementById('editar-cnpj').value = fornecedor.cnpj;
+        document.getElementById('editar-telefone').value = fornecedor.telefone;
+        document.getElementById('editar-email').value = fornecedor.email;
+        document.getElementById('editar-produto').value = fornecedor.produto;
+        document.getElementById('editar-endereco').value = fornecedor.endereco || '';
+        
+        document.getElementById('modal-editar').style.display = 'flex';
+      }
+    }
+
+    document.getElementById('form-editar').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const id = parseInt(document.getElementById('editar-id').value);
+      const empresa = document.getElementById('editar-empresa').value;
+      const cnpj = document.getElementById('editar-cnpj').value;
+      const telefone = document.getElementById('editar-telefone').value;
+      const email = document.getElementById('editar-email').value;
+      const produto = document.getElementById('editar-produto').value;
+      const endereco = document.getElementById('editar-endereco').value;
+      
+      let fornecedores = JSON.parse(localStorage.getItem('fornecedores')) || [];
+      const index = fornecedores.findIndex(f => f.id === id);
+      
+      if (index !== -1) {
+        fornecedores[index] = {
+          ...fornecedores[index],
+          empresa,
+          cnpj,
+          telefone,
+          email,
+          produto,
+          endereco
+        };
+        
+        localStorage.setItem('fornecedores', JSON.stringify(fornecedores));
+        carregarFornecedores();
+        fecharModal();
+        alert('Fornecedor atualizado com sucesso!');
+      }
+    });
+
+    function fecharModal() {
+      document.getElementById('modal-editar').style.display = 'none';
+    }
+
+    // Excluir fornecedor
+    function excluirFornecedor(id) {
+      if (confirm('Tem certeza que deseja excluir este fornecedor?')) {
+        let fornecedores = JSON.parse(localStorage.getItem('fornecedores')) || [];
+        fornecedores = fornecedores.filter(fornecedor => fornecedor.id !== id);
+        localStorage.setItem('fornecedores', JSON.stringify(fornecedores));
+        carregarFornecedores();
+        alert('Fornecedor excluído com sucesso!');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cadastro de Produtos — CHOCOLATEMPO</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="icon" href="./assets/logo.jpg" type="image/jpeg">
+  <style>
+    :root {
+      --primary: #4a2c2a;
+      --secondary: #d4a55d;
+      --accent: #7b3f00;
+      --light: #f9f5f0;
+      --white: #ffffff;
+      --gray: #6c757d;
+      --success: #28a745;
+      --danger: #e74c3c;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: var(--light);
+      color: var(--primary);
+      min-height: 100vh;
+    }
+
+    .header-wrapper {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      box-shadow: 0 4px 20px rgba(74, 44, 42, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .user-welcome {
+      color: var(--white);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, var(--secondary), #e8c48e);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(212, 165, 93, 0.4);
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .brand-text h1 {
+      color: var(--white);
+      margin-bottom: 2px;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .brand-text .slogan {
+      font-size: 0.85rem;
+      color: var(--secondary);
+      font-weight: 500;
+    }
+
+    .nav {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .nav a:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .nav a.active {
+      background: var(--secondary);
+      color: var(--primary);
+      box-shadow: 0 4px 12px rgba(212, 121, 93, 0.3);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    .cadastro-container {
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: var(--white);
+      padding: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .page-header h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: var(--secondary);
+      color: var(--primary);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* Lista de Produtos */
+    .produtos-section {
+      padding: 30px;
+    }
+
+    .section-title {
+      color: var(--primary);
+      margin-bottom: 25px;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .produtos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .produto-card {
+      background: var(--light);
+      border-radius: 8px;
+      padding: 20px;
+      border: 1px solid rgba(212, 165, 93, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .produto-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .produto-imagem {
+      width: 100%;
+      height: 200px;
+      background: var(--white);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      overflow: hidden;
+    }
+
+    .produto-imagem img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .produto-imagem i {
+      font-size: 3rem;
+      color: var(--secondary);
+    }
+
+    .produto-info h4 {
+      color: var(--primary);
+      margin-bottom: 8px;
+      font-size: 1.2rem;
+    }
+
+    .produto-descricao {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .produto-metadata {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 15px;
+    }
+
+    .produto-metadata span {
+      font-size: 0.85rem;
+      color: var(--primary);
+    }
+
+    .produto-acoes {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-action {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+    }
+
+    .btn-action:hover {
+      background: var(--accent);
+    }
+
+    .btn-action.edit {
+      background: var(--success);
+    }
+
+    .btn-action.delete {
+      background: var(--danger);
+    }
+
+    /* Formulário */
+    .form-section {
+      padding: 30px;
+      border-top: 2px solid var(--light);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e9ecef;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--secondary);
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .image-preview {
+      margin-top: 10px;
+      border: 2px dashed #e9ecef;
+      border-radius: 6px;
+      padding: 20px;
+      text-align: center;
+      background: var(--light);
+    }
+
+    .image-preview-text {
+      color: var(--gray);
+    }
+
+    .image-preview img {
+      max-width: 200px;
+      max-height: 200px;
+      display: none;
+      margin: 0 auto;
+      border-radius: 4px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .btn-submit {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-submit:hover {
+      background: var(--accent);
+    }
+
+    .btn-cancel {
+      background: var(--gray);
+      color: var(--white);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-cancel:hover {
+      background: #5a6268;
+    }
+
+    /* Estado vazio */
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      color: var(--secondary);
+    }
+
+    /* Modal de Edição */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: var(--white);
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray);
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .produtos-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .page-header {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-wrapper">
+    <div class="header">
+      <div class="brand">
+        <div class="logo">🍫</div>
+        <div class="brand-text">
+          <h1>CHOCOLATEMPO</h1>
+          <div class="slogan">Cadastro de Produtos</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="cadastro_produto.html" class="active"><i class="fas fa-cookie"></i> Produtos</a>
+        <a href="cadastro_motoboy.html"><i class="fas fa-motorcycle"></i> Motoboys</a>
+        <a href="cadastro_fornecedor.html"><i class="fas fa-truck"></i> Fornecedores</a>
+        <a href="relatorios.html"><i class="fas fa-chart-line"></i> Relatórios</a>
+        <a href="carrinho.html"><i class="fas fa-shopping-cart"></i> Carrinho</a>
+      </nav>
+      <div class="menu-right">
+        <div class="user-welcome">Olá, Admin</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="cadastro-container">
+      <div class="page-header">
+        <h2><i class="fas fa-cookie"></i> Gerenciar Produtos</h2>
+        <button class="btn-primary" onclick="mostrarFormulario()">
+          <i class="fas fa-plus"></i> Novo Produto
+        </button>
+      </div>
+
+      <!-- Lista de Produtos Cadastrados -->
+      <div class="produtos-section">
+        <h3 class="section-title"><i class="fas fa-boxes"></i> Produtos Cadastrados</h3>
+        <div id="lista-produtos" class="produtos-grid">
+          <!-- Os produtos serão carregados aqui -->
+        </div>
+      </div>
+
+      <!-- Formulário de Cadastro-->
+      <div id="form-section" class="form-section" style="display: none;">
+        <h3 class="section-title"><i class="fas fa-plus-circle"></i> Cadastrar Novo Produto</h3>
+        
+        <form id="form-produto">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nome">Nome do Produto *</label>
+              <input type="text" id="nome" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="categoria">Categoria *</label>
+              <select id="categoria" class="form-control" required>
+                <option value="">Selecione uma categoria</option>
+                <option value="Trufas">Trufas</option>
+                <option value="Tabletes">Tabletes</option>
+                <option value="Bombons">Bombons</option>
+                <option value="Box">Box Presente</option>
+                <option value="Especiais">Chocolates Especiais</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="descricao">Descrição do Produto *</label>
+            <textarea id="descricao" class="form-control" required></textarea>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="preco">Preço (R$) *</label>
+              <input type="number" id="preco" class="form-control" step="0.01" min="0" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="estoque">Quantidade em Estoque *</label>
+              <input type="number" id="estoque" class="form-control" min="0" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="imagem">Imagem do Produto</label>
+            <input type="file" id="imagem" class="form-control" accept="image/*">
+            
+            <div class="image-preview">
+              <div class="image-preview-text">
+                <i class="fas fa-image"></i><br>
+                Preview da imagem
+              </div>
+              <img id="preview" src="#" alt="Preview">
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button type="submit" class="btn-submit">
+              <i class="fas fa-save"></i> Cadastrar Produto
+            </button>
+            <button type="button" class="btn-cancel" onclick="ocultarFormulario()">
+              <i class="fas fa-times"></i> Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-editar" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-edit"></i> Editar Produto</h3>
+        <button class="modal-close" onclick="fecharModal()">&times;</button>
+      </div>
+      <form id="form-editar">
+        <input type="hidden" id="editar-id">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editar-nome">Nome do Produto *</label>
+            <input type="text" id="editar-nome" class="form-control" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="editar-categoria">Categoria *</label>
+            <select id="editar-categoria" class="form-control" required>
+              <option value="">Selecione uma categoria</option>
+              <option value="Trufas">Trufas</option>
+              <option value="Tabletes">Tabletes</option>
+              <option value="Bombons">Bombons</option>
+              <option value="Box">Box Presente</option>
+              <option value="Especiais">Chocolates Especiais</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="editar-descricao">Descrição do Produto *</label>
+          <textarea id="editar-descricao" class="form-control" required></textarea>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editar-preco">Preço (R$) *</label>
+            <input type="number" id="editar-preco" class="form-control" step="0.01" min="0" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="editar-estoque">Quantidade em Estoque *</label>
+            <input type="number" id="editar-estoque" class="form-control" min="0" required>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-save"></i> Salvar Alterações
+          </button>
+          <button type="button" class="btn-cancel" onclick="fecharModal()">
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const produtosPadrao = [
+      {
+        id: 1,
+        nome: "Trufa Clássica",
+        categoria: "Trufas",
+        descricao: "Trufa artesanal de chocolate ao leite — macia e aveludada. Perfeita para momentos especiais.",
+        preco: 8.90,
+        estoque: 50,
+        imagem: "imagenssite/trufaclassica.png"
+      },
+      {
+        id: 2,
+        nome: "Tablete 70% Cacau",
+        categoria: "Tabletes",
+        descricao: "Intensidade e notas frutadas. Para paladares exigentes que apreciam o verdadeiro chocolate.",
+        preco: 12.50,
+        estoque: 30,
+        imagem: "imagenssite/tablete70cacau.png"
+      },
+      {
+        id: 3,
+        nome: "Bombom Caramelo",
+        categoria: "Bombons",
+        descricao: "Recheio cremoso com toque de flor de sal. Uma explosão de sabor a cada mordida.",
+        preco: 6.50,
+        estoque: 40,
+        imagem: "imagenssite/trufacaramelo.jpg"
+      },
+      {
+        id: 4,
+        nome: "Chocolate Branco",
+        categoria: "Tabletes",
+        descricao: "O clássico chocolate branco, suave e cremoso. Ideal para quem prefere sabores mais doces.",
+        preco: 9.90,
+        estoque: 35,
+        imagem: "imagenssite/chocolatebranco.jpg"
+      },
+      {
+        id: 5,
+        nome: "Trufa Bela",
+        categoria: "Trufas",
+        descricao: "Trufa de chocolate branco com raspas de limão. Refrescante e sofisticada.",
+        preco: 9.50,
+        estoque: 25,
+        imagem: "imagenssite/trufabela.png"
+      },
+      {
+        id: 6,
+        nome: "Box 6 Sortidos",
+        categoria: "Box",
+        descricao: "Seleção especial — presente perfeito. 6 unidades dos nossos melhores chocolates.",
+        preco: 49.90,
+        estoque: 20,
+        imagem: "imagenssite/box6sortidos.jpg"
+      },
+      {
+        id: 7,
+        nome: "Tablete Ao Leite",
+        categoria: "Tabletes",
+        descricao: "Chocolate clássico, cremoso e reconfortante. O preferido das crianças.",
+        preco: 7.90,
+        estoque: 45,
+        imagem: "imagenssite/tabletechocolate.png"
+      },
+      {
+        id: 8,
+        nome: "Bombom Amendoim",
+        categoria: "Bombons",
+        descricao: "Crocância e doçura na medida certa. Textura única que derrete na boca.",
+        preco: 5.90,
+        estoque: 60,
+        imagem: "imagenssite/bombomamendoim.png"
+      }
+    ];
+
+    document.addEventListener('DOMContentLoaded', function() {
+      inicializarProdutos();
+      carregarProdutos();
+    });
+
+    function inicializarProdutos() {
+      let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+      if (produtos.length === 0) {
+        localStorage.setItem('produtos', JSON.stringify(produtosPadrao));
+      }
+    }
+
+    function carregarProdutos() {
+      const produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+      const lista = document.getElementById('lista-produtos');
+      lista.innerHTML = '';
+
+      if (produtos.length === 0) {
+        lista.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-box-open"></i>
+            <h3>Nenhum produto cadastrado</h3>
+            <p>Clique em "Novo Produto" para adicionar o primeiro produto.</p>
+          </div>
+        `;
+        return;
+      }
+
+      produtos.forEach(produto => {
+        const produtoCard = document.createElement('div');
+        produtoCard.className = 'produto-card';
+        produtoCard.innerHTML = `
+          <div class="produto-imagem">
+            ${produto.imagem ? 
+              `<img src="${produto.imagem}" alt="${produto.nome}" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-cookie\\'></i>'">` : 
+              `<i class="fas fa-cookie"></i>`
+            }
+          </div>
+          <div class="produto-info">
+            <h4>${produto.nome}</h4>
+            <div class="produto-descricao">${produto.descricao}</div>
+            <div class="produto-metadata">
+              <span><strong>Categoria:</strong> ${produto.categoria}</span>
+              <span><strong>Preço:</strong> R$ ${produto.preco.toFixed(2)}</span>
+              <span><strong>Estoque:</strong> ${produto.estoque} unidades</span>
+            </div>
+          </div>
+          <div class="produto-acoes">
+            <button class="btn-action edit" onclick="editarProduto(${produto.id})">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button class="btn-action delete" onclick="excluirProduto(${produto.id})">
+              <i class="fas fa-trash"></i> Excluir
+            </button>
+          </div>
+        `;
+        lista.appendChild(produtoCard);
+      });
+    }
+
+    function mostrarFormulario() {
+      document.getElementById('form-section').style.display = 'block';
+      document.getElementById('form-produto').reset();
+      document.getElementById('preview').style.display = 'none';
+      document.querySelector('.image-preview-text').style.display = 'block';
+    }
+
+    function ocultarFormulario() {
+      document.getElementById('form-section').style.display = 'none';
+    }
+
+    // Preview da imagem
+    document.getElementById('imagem').addEventListener('change', function(e) {
+      const preview = document.getElementById('preview');
+      const previewText = document.querySelector('.image-preview-text');
+      
+      if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+          previewText.style.display = 'none';
+        }
+        
+        reader.readAsDataURL(this.files[0]);
+      }
+    });
+
+    // Cadastrar novo produto
+    document.getElementById('form-produto').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const nome = document.getElementById('nome').value;
+      const categoria = document.getElementById('categoria').value;
+      const descricao = document.getElementById('descricao').value;
+      const preco = parseFloat(document.getElementById('preco').value);
+      const estoque = parseInt(document.getElementById('estoque').value);
+      
+      if (!nome || !categoria || !descricao || isNaN(preco) || isNaN(estoque)) {
+        alert('Por favor, preencha todos os campos obrigatórios.');
+        return;
+      }
+      
+      const produto = {
+        id: Date.now(),
+        nome,
+        categoria,
+        descricao,
+        preco,
+        estoque,
+        imagem: document.getElementById('preview').src || ''
+      };
+      
+      salvarProduto(produto);
+      adicionarProdutoNaLista(produto);
+      
+      this.reset();
+      document.getElementById('preview').style.display = 'none';
+      document.querySelector('.image-preview-text').style.display = 'block';
+      ocultarFormulario();
+      
+      alert('Produto cadastrado com sucesso!');
+    });
+
+    function salvarProduto(produto) {
+      let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+      produtos.push(produto);
+      localStorage.setItem('produtos', JSON.stringify(produtos));
+    }
+
+    function adicionarProdutoNaLista(produto) {
+      const lista = document.getElementById('lista-produtos');
+      const emptyState = lista.querySelector('.empty-state');
+      
+      if (emptyState) {
+        emptyState.remove();
+      }
+      
+      const produtoCard = document.createElement('div');
+      produtoCard.className = 'produto-card';
+      produtoCard.innerHTML = `
+        <div class="produto-imagem">
+          ${produto.imagem ? 
+            `<img src="${produto.imagem}" alt="${produto.nome}">` : 
+            `<i class="fas fa-cookie"></i>`
+          }
+        </div>
+        <div class="produto-info">
+          <h4>${produto.nome}</h4>
+          <div class="produto-descricao">${produto.descricao}</div>
+          <div class="produto-metadata">
+            <span><strong>Categoria:</strong> ${produto.categoria}</span>
+            <span><strong>Preço:</strong> R$ ${produto.preco.toFixed(2)}</span>
+            <span><strong>Estoque:</strong> ${produto.estoque} unidades</span>
+          </div>
+        </div>
+        <div class="produto-acoes">
+          <button class="btn-action edit" onclick="editarProduto(${produto.id})">
+            <i class="fas fa-edit"></i> Editar
+          </button>
+          <button class="btn-action delete" onclick="excluirProduto(${produto.id})">
+            <i class="fas fa-trash"></i> Excluir
+          </button>
+        </div>
+      `;
+      
+      lista.appendChild(produtoCard);
+    }
+
+    // Editar produto
+    function editarProduto(id) {
+      const produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+      const produto = produtos.find(p => p.id === id);
+      
+      if (produto) {
+        document.getElementById('editar-id').value = produto.id;
+        document.getElementById('editar-nome').value = produto.nome;
+        document.getElementById('editar-categoria').value = produto.categoria;
+        document.getElementById('editar-descricao').value = produto.descricao;
+        document.getElementById('editar-preco').value = produto.preco;
+        document.getElementById('editar-estoque').value = produto.estoque;
+        
+        document.getElementById('modal-editar').style.display = 'flex';
+      }
+    }
+
+    document.getElementById('form-editar').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const id = parseInt(document.getElementById('editar-id').value);
+      const nome = document.getElementById('editar-nome').value;
+      const categoria = document.getElementById('editar-categoria').value;
+      const descricao = document.getElementById('editar-descricao').value;
+      const preco = parseFloat(document.getElementById('editar-preco').value);
+      const estoque = parseInt(document.getElementById('editar-estoque').value);
+      
+      let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+      const index = produtos.findIndex(p => p.id === id);
+      
+      if (index !== -1) {
+        produtos[index] = {
+          ...produtos[index],
+          nome,
+          categoria,
+          descricao,
+          preco,
+          estoque
+        };
+        
+        localStorage.setItem('produtos', JSON.stringify(produtos));
+        carregarProdutos();
+        fecharModal();
+        alert('Produto atualizado com sucesso!');
+      }
+    });
+
+    function fecharModal() {
+      document.getElementById('modal-editar').style.display = 'none';
+    }
+
+    // Excluir produto
+    function excluirProduto(id) {
+      if (confirm('Tem certeza que deseja excluir este produto?')) {
+        let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+        produtos = produtos.filter(produto => produto.id !== id);
+        localStorage.setItem('produtos', JSON.stringify(produtos));
+        carregarProdutos();
+        alert('Produto excluído com sucesso!');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Relatório de Compras — CHOCOLATEMPO</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍫</text></svg>">
+  <style>
+    :root {
+      --primary: #4a2c2a;
+      --secondary: #d4a55d;
+      --accent: #7b3f00;
+      --light: #f9f5f0;
+      --white: #ffffff;
+      --gray: #6c757d;
+      --success: #28a745;
+      --danger: #e74c3c;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: var(--light);
+      color: var(--primary);
+      min-height: 100vh;
+    }
+
+    /* Header Padronizado */
+    .header-wrapper {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      box-shadow: 0 4px 20px rgba(74, 44, 42, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, var(--secondary), #e8c48e);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(212, 165, 93, 0.4);
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .brand-text h1 {
+      color: var(--white);
+      margin-bottom: 2px;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .brand-text .slogan {
+      font-size: 0.85rem;
+      color: var(--secondary);
+      font-weight: 500;
+    }
+
+    .nav {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .nav a:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .nav a.active {
+      background: var(--secondary);
+      color: var(--primary);
+      box-shadow: 0 4px 12px rgba(212, 121, 93, 0.3);
+    }
+
+    .menu-right {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    /* Resto do CSS permanece igual */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+    
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+    
+    h2 {
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    /* Estatísticas */
+    .estatisticas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+    
+    .estatistica-card {
+      background-color: var(--white);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    
+    .estatistica-valor {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin: 10px 0;
+    }
+    
+    .estatistica-descricao {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+    
+    /* Filtros */
+    .filtros {
+      background-color: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+    
+    .filtros-row {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .filtro-group {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .filtro-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid #d9c7b8;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 2px rgba(212, 165, 93, 0.2);
+    }
+    
+    /* Botões */
+    .btn-primary {
+      background-color: var(--secondary);
+      color: var(--primary);
+      border: none;
+      padding: 12px 25px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--white);
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background-color: #f0e6dd;
+      color: var(--primary);
+      border: none;
+      padding: 12px 25px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.3s;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #e4d5c8;
+    }
+    
+    /* Tabela */
+    .tabela-container {
+      background-color: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      overflow: hidden;
+      margin-bottom: 25px;
+    }
+    
+    .tabela-header {
+      padding: 20px;
+      border-bottom: 1px solid #e4d5c8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .tabela-compras {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .tabela-compras th {
+      background-color: #f0e6dd;
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--primary);
+      border-bottom: 1px solid #e4d5c8;
+    }
+    
+    .tabela-compras td {
+      padding: 15px;
+      border-bottom: 1px solid #f0e6dd;
+    }
+    
+    .tabela-compras tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .tabela-compras tr:hover {
+      background-color: #fdf9f5;
+    }
+    
+    .status-recebido {
+      background-color: #e6f7ee;
+      color: #27ae60;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    
+    .status-pendente {
+      background-color: #fff4e6;
+      color: #f39c12;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    
+    .status-cancelado {
+      background-color: #ffe6e6;
+      color: #e74c3c;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    
+    /* Gráfico */
+    .grafico-container {
+      background-color: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      padding: 25px;
+      margin-bottom: 25px;
+    }
+    
+    .grafico-placeholder {
+      height: 300px;
+      background-color: var(--light);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray);
+      font-size: 1.1rem;
+    }
+    
+    /* Fornecedores principais */
+    .fornecedores-container {
+      background-color: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      padding: 25px;
+    }
+    
+    .fornecedor-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #f0e6dd;
+    }
+    
+    .fornecedor-item:last-child {
+      border-bottom: none;
+    }
+    
+    .fornecedor-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .fornecedor-imagem {
+      width: 50px;
+      height: 50px;
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f0e6dd;
+      color: var(--secondary);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    
+    .fornecedor-imagem img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .fornecedor-detalhes h4 {
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+    
+    .fornecedor-detalhes .produto {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+    
+    .fornecedor-compras {
+      text-align: right;
+    }
+    
+    .fornecedor-compras .quantidade {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .fornecedor-compras .total {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+    
+    /* Mensagem vazia */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray);
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      color: var(--secondary);
+    }
+
+    @media (max-width: 768px) {
+      .filtros-row {
+        flex-direction: column;
+      }
+      
+      .filtro-group {
+        min-width: 100%;
+      }
+      
+      .nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .page-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Cabeçalho Padronizado -->
+  <div class="header-wrapper">
+    <div class="header">
+      <div class="brand">
+        <div class="logo">🍫</div>
+        <div class="brand-text">
+          <h1>CHOCOLATEMPO</h1>
+          <div class="slogan">Relatório de Compras</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="cadastro_produto.html"><i class="fas fa-cookie"></i> Produtos</a>
+        <a href="cadastro_motoboy.html"><i class="fas fa-motorcycle"></i> Motoboys</a>
+        <a href="cadastro_fornecedor.html"><i class="fas fa-truck"></i> Fornecedores</a>
+        <a href="relatorio_compras.html" class="active"><i class="fas fa-chart-line"></i> Relatório de Compras</a>
+        <a href="carrinho.html"><i class="fas fa-shopping-cart"></i> Carrinho</a>
+      </nav>
+      <div class="menu-right">
+        <div class="user-welcome">Olá, Admin</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Resto do conteúdo permanece igual -->
+    <div class="page-header">
+      <h2><i class="fas fa-shopping-bag"></i> Relatório de Compras</h2>
+      <div>
+        <button class="btn-primary" id="btn-exportar">
+          <i class="fas fa-file-export"></i> Exportar Relatório
+        </button>
+      </div>
+    </div>
+    
+    <!-- Estatísticas -->
+    <div class="estatisticas">
+      <div class="estatistica-card">
+        <div class="estatistica-descricao">Total de Compras</div>
+        <div class="estatistica-valor" id="total-compras">12</div>
+      </div>
+      <div class="estatistica-card">
+        <div class="estatistica-descricao">Valor Total</div>
+        <div class="estatistica-valor" id="valor-total">R$ 2.845,80</div>
+      </div>
+      <div class="estatistica-card">
+        <div class="estatistica-descricao">Fornecedores</div>
+        <div class="estatistica-valor" id="total-fornecedores">8</div>
+      </div>
+      <div class="estatistica-card">
+        <div class="estatistica-descricao">Produtos Comprados</div>
+        <div class="estatistica-valor" id="produtos-comprados">156</div>
+      </div>
+    </div>
+    
+    <!-- Filtros -->
+    <div class="filtros">
+      <div class="filtros-row">
+        <div class="filtro-group">
+          <label for="filtro-data-inicio">Data Início</label>
+          <input type="date" id="filtro-data-inicio" class="form-control">
+        </div>
+        
+        <div class="filtro-group">
+          <label for="filtro-data-fim">Data Fim</label>
+          <input type="date" id="filtro-data-fim" class="form-control">
+        </div>
+        
+        <div class="filtro-group">
+          <label for="filtro-fornecedor">Fornecedor</label>
+          <select id="filtro-fornecedor" class="form-control">
+            <option value="">Todos os fornecedores</option>
+            <option value="Cacau Brasil">Cacau Brasil</option>
+            <option value="ChocoMine">ChocoMine</option>
+            <option value="Doce Sabor">Doce Sabor</option>
+            <option value="Cacau Premium">Cacau Premium</option>
+            <option value="ChocoArte">ChocoArte</option>
+          </select>
+        </div>
+        
+        <div class="filtro-group">
+          <label for="filtro-status">Status</label>
+          <select id="filtro-status" class="form-control">
+            <option value="">Todos os status</option>
+            <option value="recebido">Recebido</option>
+            <option value="pendente">Pendente</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="filtros-row" style="margin-top: 15px;">
+        <button id="btn-aplicar-filtros" class="btn-primary">
+          <i class="fas fa-filter"></i> Aplicar Filtros
+        </button>
+        <button id="btn-limpar-filtros" class="btn-secondary">
+          <i class="fas fa-times"></i> Limpar Filtros
+        </button>
+      </div>
+    </div>
+    
+    <!-- Gráfico de Compras -->
+    <div class="grafico-container">
+      <h3><i class="fas fa-chart-bar"></i> Compras por Período</h3>
+      <div class="grafico-placeholder" id="grafico-compras">
+        <i class="fas fa-chart-bar" style="font-size: 3rem; margin-right: 15px;"></i>
+        Gráfico de compras por período será exibido aqui
+      </div>
+    </div>
+    
+    <!-- Tabela de Compras -->
+    <div class="tabela-container">
+      <div class="tabela-header">
+        <h3>Histórico de Compras</h3>
+        <div class="small" id="info-tabela">Mostrando 12 compras</div>
+      </div>
+      
+      <table class="tabela-compras">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Fornecedor</th>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Valor Unitário</th>
+            <th>Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-corpo">
+          <!-- As compras serão carregadas aqui via JavaScript -->
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Fornecedores Principais -->
+    <div class="fornecedores-container">
+      <h3><i class="fas fa-trophy"></i> Principais Fornecedores</h3>
+      <div id="fornecedores-principais">
+        <!-- Os fornecedores principais serão carregados aqui via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // O JavaScript permanece exatamente igual
+    // Dados de exemplo
+    const compras = [
+      { id: 1, data: "2025-09-01", fornecedor: "Cacau Brasil", produto: "Cacau em Pó Premium", quantidade: 50, valorUnitario: 8.50, total: 425.00, status: "recebido" },
+      { id: 2, data: "2025-09-03", fornecedor: "ChocoMine", produto: "Chocolate 70%", quantidade: 30, valorUnitario: 12.80, total: 384.00, status: "recebido" },
+      { id: 3, data: "2025-09-05", fornecedor: "Doce Sabor", produto: "Açúcar Orgânico", quantidade: 25, valorUnitario: 6.20, total: 155.00, status: "recebido" },
+      { id: 4, data: "2025-09-07", fornecedor: "Cacau Premium", produto: "Manteiga de Cacau", quantidade: 15, valorUnitario: 18.90, total: 283.50, status: "pendente" },
+      { id: 5, data: "2025-09-08", fornecedor: "ChocoArte", produto: "Chocolate Branco", quantidade: 20, valorUnitario: 9.75, total: 195.00, status: "recebido" },
+      { id: 6, data: "2025-09-10", fornecedor: "Cacau Brasil", produto: "Cacau em Pó Tradicional", quantidade: 40, valorUnitario: 6.80, total: 272.00, status: "recebido" },
+      { id: 7, data: "2025-09-12", fornecedor: "Doce Sabor", produto: "Leite em Pó", quantidade: 18, valorUnitario: 15.40, total: 277.20, status: "cancelado" },
+      { id: 8, data: "2025-09-14", fornecedor: "ChocoMine", produto: "Chocolate ao Leite", quantidade: 35, valorUnitario: 10.20, total: 357.00, status: "recebido" },
+      { id: 9, data: "2025-09-15", fornecedor: "Cacau Premium", produto: "Nibs de Cacau", quantidade: 12, valorUnitario: 22.50, total: 270.00, status: "recebido" },
+      { id: 10, data: "2025-09-17", fornecedor: "ChocoArte", produto: "Chocolate Amargo", quantidade: 28, valorUnitario: 11.90, total: 333.20, status: "pendente" },
+      { id: 11, data: "2025-09-19", fornecedor: "Doce Sabor", produto: "Glucose", quantidade: 22, valorUnitario: 7.80, total: 171.60, total: 171.60, status: "recebido" },
+      { id: 12, data: "2025-09-20", fornecedor: "Cacau Brasil", produto: "Cacau em Pó Premium", quantidade: 45, valorUnitario: 8.50, total: 382.50, status: "recebido" }
+    ];
+    
+    // Carregar relatório ao iniciar a página
+    document.addEventListener('DOMContentLoaded', function() {
+      carregarRelatorioCompras();
+      
+      // Configurar eventos dos filtros
+      document.getElementById('btn-aplicar-filtros').addEventListener('click', aplicarFiltros);
+      document.getElementById('btn-limpar-filtros').addEventListener('click', limparFiltros);
+      document.getElementById('btn-exportar').addEventListener('click', exportarRelatorio);
+    });
+    
+    // Carregar e exibir relatório de compras
+    function carregarRelatorioCompras() {
+      carregarEstatisticas(compras);
+      carregarTabelaCompras(compras);
+      carregarFornecedoresPrincipais(compras);
+    }
+    
+    // Carregar estatísticas
+    function carregarEstatisticas(compras) {
+      // Total de compras
+      document.getElementById('total-compras').textContent = compras.length;
+      
+      // Valor total
+      const valorTotal = compras.reduce((total, compra) => total + compra.total, 0);
+      document.getElementById('valor-total').textContent = `R$ ${valorTotal.toFixed(2)}`;
+      
+      // Total de fornecedores
+      const fornecedoresUnicos = [...new Set(compras.map(compra => compra.fornecedor))];
+      document.getElementById('total-fornecedores').textContent = fornecedoresUnicos.length;
+      
+      // Produtos comprados
+      const produtosComprados = compras.reduce((total, compra) => total + compra.quantidade, 0);
+      document.getElementById('produtos-comprados').textContent = produtosComprados;
+    }
+    
+    // Carregar tabela de compras
+    function carregarTabelaCompras(compras) {
+      const tabelaCorpo = document.getElementById('tabela-corpo');
+      tabelaCorpo.innerHTML = '';
+      
+      if (compras.length === 0) {
+        tabelaCorpo.innerHTML = `
+          <tr>
+            <td colspan="7" class="empty-state">
+              <i class="fas fa-shopping-bag"></i>
+              <h3>Nenhuma compra encontrada</h3>
+              <p>Tente ajustar os filtros para encontrar o que procura.</p>
+            </td>
+          </tr>
+        `;
+        document.getElementById('info-tabela').textContent = 'Mostrando 0 compras';
+        return;
+      }
+      
+      compras.forEach(compra => {
+        const linha = document.createElement('tr');
+        
+        // Formatar data
+        const dataObj = new Date(compra.data);
+        const dataFormatada = dataObj.toLocaleDateString('pt-BR');
+        
+        // Definir classe do status
+        let classeStatus = '';
+        let textoStatus = '';
+        
+        switch(compra.status) {
+          case 'recebido':
+            classeStatus = 'status-recebido';
+            textoStatus = 'Recebido';
+            break;
+          case 'pendente':
+            classeStatus = 'status-pendente';
+            textoStatus = 'Pendente';
+            break;
+          case 'cancelado':
+            classeStatus = 'status-cancelado';
+            textoStatus = 'Cancelado';
+            break;
+        }
+        
+        linha.innerHTML = `
+          <td>${dataFormatada}</td>
+          <td>${compra.fornecedor}</td>
+          <td>${compra.produto}</td>
+          <td>${compra.quantidade}</td>
+          <td>R$ ${compra.valorUnitario.toFixed(2)}</td>
+          <td>R$ ${compra.total.toFixed(2)}</td>
+          <td><span class="${classeStatus}">${textoStatus}</span></td>
+        `;
+        
+        tabelaCorpo.appendChild(linha);
+      });
+      
+      document.getElementById('info-tabela').textContent = `Mostrando ${compras.length} compras`;
+    }
+    
+    // Carregar fornecedores principais
+    function carregarFornecedoresPrincipais(compras) {
+      const container = document.getElementById('fornecedores-principais');
+      
+      // Agrupar compras por fornecedor
+      const fornecedoresAgrupados = {};
+      
+      compras.forEach(compra => {
+        if (!fornecedoresAgrupados[compra.fornecedor]) {
+          fornecedoresAgrupados[compra.fornecedor] = {
+            quantidade: 0,
+            total: 0,
+            compras: 0
+          };
+        }
+        
+        fornecedoresAgrupados[compra.fornecedor].quantidade += compra.quantidade;
+        fornecedoresAgrupados[compra.fornecedor].total += compra.total;
+        fornecedoresAgrupados[compra.fornecedor].compras += 1;
+      });
+      
+      // Converter para array e ordenar por valor total
+      const fornecedoresOrdenados = Object.keys(fornecedoresAgrupados).map(fornecedor => {
+        return {
+          nome: fornecedor,
+          quantidade: fornecedoresAgrupados[fornecedor].quantidade,
+          total: fornecedoresAgrupados[fornecedor].total,
+          compras: fornecedoresAgrupados[fornecedor].compras
+        };
+      }).sort((a, b) => b.total - a.total);
+      
+      // Limitar aos 5 primeiros
+      const topFornecedores = fornecedoresOrdenados.slice(0, 5);
+      
+      if (topFornecedores.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-truck"></i>
+            <h3>Nenhum fornecedor</h3>
+            <p>Não há dados de compras para exibir os fornecedores principais.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = '';
+      
+      topFornecedores.forEach(fornecedor => {
+        const fornecedorItem = document.createElement('div');
+        fornecedorItem.className = 'fornecedor-item';
+        fornecedorItem.innerHTML = `
+          <div class="fornecedor-info">
+            <div class="fornecedor-imagem">
+              <i class="fas fa-truck"></i>
+            </div>
+            <div class="fornecedor-detalhes">
+              <h4>${fornecedor.nome}</h4>
+              <div class="produto">${fornecedor.compras} compras realizadas</div>
+            </div>
+          </div>
+          <div class="fornecedor-compras">
+            <div class="quantidade">${fornecedor.quantidade} unidades</div>
+            <div class="total">R$ ${fornecedor.total.toFixed(2)}</div>
+          </div>
+        `;
+        
+        container.appendChild(fornecedorItem);
+      });
+    }
+    
+    // Aplicar filtros
+    function aplicarFiltros() {
+      const dataInicio = document.getElementById('filtro-data-inicio').value;
+      const dataFim = document.getElementById('filtro-data-fim').value;
+      const fornecedorFiltro = document.getElementById('filtro-fornecedor').value;
+      const statusFiltro = document.getElementById('filtro-status').value;
+      
+      const comprasFiltradas = compras.filter(compra => {
+        // Filtro por data
+        if (dataInicio && compra.data < dataInicio) return false;
+        if (dataFim && compra.data > dataFim) return false;
+        
+        // Filtro por fornecedor
+        if (fornecedorFiltro && compra.fornecedor !== fornecedorFiltro) return false;
+        
+        // Filtro por status
+        if (statusFiltro && compra.status !== statusFiltro) return false;
+        
+        return true;
+      });
+      
+      carregarEstatisticas(comprasFiltradas);
+      carregarTabelaCompras(comprasFiltradas);
+      carregarFornecedoresPrincipais(comprasFiltradas);
+    }
+    
+    // Limpar filtros
+    function limparFiltros() {
+      document.getElementById('filtro-data-inicio').value = '';
+      document.getElementById('filtro-data-fim').value = '';
+      document.getElementById('filtro-fornecedor').value = '';
+      document.getElementById('filtro-status').value = '';
+      
+      carregarRelatorioCompras();
+    }
+    
+    // Exportar relatório
+    function exportarRelatorio() {
+      alert('Funcionalidade de exportação será implementada em breve!');
+      // Em uma implementação real, aqui seria gerado um CSV ou PDF
+    }
+  </script>
+</body>
+</html>
