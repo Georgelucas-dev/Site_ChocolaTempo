@@ -440,8 +440,10 @@
       <nav class="nav">
         <a href="index.html"><i class="fas fa-home"></i> Home</a>
         <a href="cadastro_produto.html"><i class="fas fa-cookie"></i> Produtos</a>
-        <a href="cadastro_motoboy.html"><i class="fas fa-motorcycle"></i> Motoboys</a>
         <a href="cadastro_fornecedor.html" class="active"><i class="fas fa-truck"></i> Fornecedores</a>
+        <a href="cadastro_motoboy.html"><i class="fas fa-motorcycle"></i> Motoboys</a>
+        <a href="cadastro_cliente.html"><i class="fas fa-users"></i> Clientes</a>
+        <a href="cadastro_funcionario.html"><i class="fas fa-user-tie"></i> Funcionários</a>
         <a href="relatorios.html"><i class="fas fa-chart-line"></i> Relatórios</a>
         <a href="carrinho.html"><i class="fas fa-shopping-cart"></i> Carrinho</a>
       </nav>
@@ -458,6 +460,40 @@
         <button class="btn-primary" onclick="mostrarFormulario()">
           <i class="fas fa-plus"></i> Novo Fornecedor
         </button>
+      </div>
+
+      <!-- Filtros de Busca -->
+      <div class="filtros-section" style="background: var(--light); padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+        <h3 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-search"></i> Filtros de Busca
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: end;">
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: 600; color: var(--primary);">Empresa:</label>
+            <input type="text" id="filtroEmpresa" placeholder="Buscar por empresa..." style="padding: 10px; border: 2px solid #e1e5e9; border-radius: 6px; font-size: 14px;">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: 600; color: var(--primary);">CNPJ:</label>
+            <input type="text" id="filtroCNPJ" placeholder="Buscar por CNPJ..." style="padding: 10px; border: 2px solid #e1e5e9; border-radius: 6px; font-size: 14px;">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: 600; color: var(--primary);">Cidade:</label>
+            <input type="text" id="filtroCidade" placeholder="Buscar por cidade..." style="padding: 10px; border: 2px solid #e1e5e9; border-radius: 6px; font-size: 14px;">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: 600; color: var(--primary);">Status:</label>
+            <select id="filtroStatus" style="padding: 10px; border: 2px solid #e1e5e9; border-radius: 6px; font-size: 14px;">
+              <option value="Todos">Todos</option>
+              <option value="Ativo">Ativo</option>
+              <option value="Inativo">Inativo</option>
+            </select>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <button type="button" onclick="aplicarFiltrosFornecedores()" style="background: var(--primary); color: var(--white); padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s ease;">
+              <i class="fas fa-search"></i> Filtrar
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Lista de Fornecedores Cadastrados -->
@@ -869,6 +905,65 @@
         alert('Fornecedor excluído com sucesso!');
       }
     }
+
+    // Filtros de fornecedores
+    function aplicarFiltrosFornecedores() {
+      const empresa = document.getElementById('filtroEmpresa').value.toLowerCase();
+      const cnpj = document.getElementById('filtroCNPJ').value.toLowerCase();
+      const cidade = document.getElementById('filtroCidade').value.toLowerCase();
+      const status = document.getElementById('filtroStatus').value;
+      
+      let fornecedores = JSON.parse(localStorage.getItem('fornecedores')) || [];
+      
+      // Filtro por empresa
+      if (empresa) {
+        fornecedores = fornecedores.filter(f => f.empresa.toLowerCase().includes(empresa));
+      }
+      
+      // Filtro por CNPJ
+      if (cnpj) {
+        fornecedores = fornecedores.filter(f => f.cnpj.toLowerCase().includes(cnpj));
+      }
+      
+      // Filtro por cidade (extrair da string de endereço)
+      if (cidade) {
+        fornecedores = fornecedores.filter(f => 
+          f.endereco && f.endereco.toLowerCase().includes(cidade)
+        );
+      }
+      
+      // Filtro por status (simular baseado em algum critério, por exemplo, se tem todos os campos preenchidos)
+      if (status !== 'Todos') {
+        if (status === 'Ativo') {
+          fornecedores = fornecedores.filter(f => f.empresa && f.cnpj && f.telefone && f.email);
+        } else if (status === 'Inativo') {
+          fornecedores = fornecedores.filter(f => !f.empresa || !f.cnpj || !f.telefone || !f.email);
+        }
+      }
+      
+      renderizarFornecedoresFiltrados(fornecedores);
+    }
+
+    function renderizarFornecedoresFiltrados(fornecedores) {
+      const lista = document.getElementById('lista-fornecedores');
+      lista.innerHTML = '';
+      
+      if (fornecedores.length === 0) {
+        lista.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 40px; grid-column: 1/-1;">Nenhum fornecedor encontrado com os filtros aplicados.</p>';
+        return;
+      }
+      
+      fornecedores.forEach(fornecedor => {
+        adicionarFornecedorNaLista(fornecedor);
+      });
+    }
+
+    // Limpar filtros ao pressionar Enter nos campos de busca
+    document.addEventListener('keyup', function(e) {
+      if (e.target.matches('#filtroEmpresa, #filtroCNPJ, #filtroCidade') && e.key === 'Enter') {
+        aplicarFiltrosFornecedores();
+      }
+    });
   </script>
 </body>
 </html>

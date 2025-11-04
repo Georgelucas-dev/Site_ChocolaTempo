@@ -445,8 +445,10 @@
       <nav class="nav">
         <a href="index.html"><i class="fas fa-home"></i> Home</a>
         <a href="cadastro_produto.html"><i class="fas fa-cookie"></i> Produtos</a>
-        <a href="cadastro_motoboy.html" class="active"><i class="fas fa-motorcycle"></i> Motoboys</a>
         <a href="cadastro_fornecedor.html"><i class="fas fa-truck"></i> Fornecedores</a>
+        <a href="cadastro_motoboy.html" class="active"><i class="fas fa-motorcycle"></i> Motoboys</a>
+        <a href="cadastro_cliente.html"><i class="fas fa-users"></i> Clientes</a>
+        <a href="cadastro_funcionario.html"><i class="fas fa-user-tie"></i> Funcionários</a>
         <a href="relatorios.html"><i class="fas fa-chart-line"></i> Relatórios</a>
         <a href="carrinho.html"><i class="fas fa-shopping-cart"></i> Carrinho</a>
       </nav>
@@ -463,6 +465,36 @@
         <button class="btn-primary" onclick="mostrarFormulario()">
           <i class="fas fa-plus"></i> Novo Motoboy
         </button>
+      </div>
+
+      <!-- Filtros de Busca -->
+      <div class="filtros-section" style="background: var(--light); padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+        <h3 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-search"></i> Filtros de Busca
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: end;">
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: 600; color: var(--primary);">Nome:</label>
+            <input type="text" id="filtroNome" placeholder="Buscar por nome..." style="padding: 10px; border: 2px solid #e1e5e9; border-radius: 6px; font-size: 14px;">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: 600; color: var(--primary);">CPF:</label>
+            <input type="text" id="filtroCPF" placeholder="Buscar por CPF..." style="padding: 10px; border: 2px solid #e1e5e9; border-radius: 6px; font-size: 14px;">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: 600; color: var(--primary);">CNH:</label>
+            <input type="text" id="filtroCNH" placeholder="Buscar por CNH..." style="padding: 10px; border: 2px solid #e1e5e9; border-radius: 6px; font-size: 14px;">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: 600; color: var(--primary);">Placa:</label>
+            <input type="text" id="filtroPlaca" placeholder="Buscar por placa..." style="padding: 10px; border: 2px solid #e1e5e9; border-radius: 6px; font-size: 14px;">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <button type="button" onclick="aplicarFiltrosMotoboys()" style="background: var(--primary); color: var(--white); padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s ease;">
+              <i class="fas fa-search"></i> Filtrar
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Lista de Motoboys Cadastrados -->
@@ -837,6 +869,59 @@
         alert('Motoboy excluído com sucesso!');
       }
     }
+
+    // Filtros de motoboys
+    function aplicarFiltrosMotoboys() {
+      const nome = document.getElementById('filtroNome').value.toLowerCase();
+      const cpf = document.getElementById('filtroCPF').value.toLowerCase();
+      const cnh = document.getElementById('filtroCNH').value.toLowerCase();
+      const placa = document.getElementById('filtroPlaca').value.toLowerCase();
+      
+      let motoboys = JSON.parse(localStorage.getItem('motoboys')) || [];
+      
+      // Filtro por nome
+      if (nome) {
+        motoboys = motoboys.filter(m => m.nome.toLowerCase().includes(nome));
+      }
+      
+      // Filtro por CPF
+      if (cpf) {
+        motoboys = motoboys.filter(m => m.cpf.toLowerCase().includes(cpf));
+      }
+      
+      // Filtro por CNH
+      if (cnh) {
+        motoboys = motoboys.filter(m => m.cnh && m.cnh.toLowerCase().includes(cnh));
+      }
+      
+      // Filtro por placa
+      if (placa) {
+        motoboys = motoboys.filter(m => m.placa.toLowerCase().includes(placa));
+      }
+      
+      renderizarMotoboysFiltrados(motoboys);
+    }
+
+    function renderizarMotoboysFiltrados(motoboys) {
+      const lista = document.getElementById('lista-motoboys');
+      lista.innerHTML = '';
+      
+      if (motoboys.length === 0) {
+        lista.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 40px; grid-column: 1/-1;">Nenhum motoboy encontrado com os filtros aplicados.</p>';
+        return;
+      }
+      
+      motoboys.forEach(motoboy => {
+        adicionarMotoboyNaLista(motoboy);
+      });
+    }
+
+    // Limpar filtros ao pressionar Enter nos campos de busca
+    document.addEventListener('keyup', function(e) {
+      if (e.target.matches('#filtroNome, #filtroCPF, #filtroCNH, #filtroPlaca') && e.key === 'Enter') {
+        aplicarFiltrosMotoboys();
+      }
+    });
   </script>
 </body>
 </html>

@@ -525,6 +525,138 @@
       }
     }
 
+    /* Modal de Perfil */
+    .modal-perfil {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.3s ease;
+      overflow-y: auto;
+    }
+
+    .modal-perfil-content {
+      background-color: var(--white);
+      margin: 2% auto;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 700px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.3s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-perfil-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--light);
+    }
+
+    .modal-perfil-header h2 {
+      color: var(--primary);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .close-perfil {
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .close-perfil:hover {
+      color: var(--danger);
+    }
+
+    .perfil-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .perfil-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .perfil-form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .perfil-form-group label {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 0.9rem;
+    }
+
+    .perfil-form-group input,
+    .perfil-form-group select {
+      padding: 12px;
+      border: 2px solid #e1e5e9;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+
+    .perfil-form-group input:focus,
+    .perfil-form-group select:focus {
+      outline: none;
+      border-color: var(--secondary);
+    }
+
+    .perfil-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: 15px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .btn-cancelar-perfil {
+      background: var(--gray);
+      color: var(--white);
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+    .btn-cancelar-perfil:hover {
+      background: #5a6268;
+    }
+
+    .btn-salvar-perfil {
+      background: var(--success);
+      color: var(--white);
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+    .btn-salvar-perfil:hover {
+      background: #218838;
+    }
+
     @media (max-width: 768px) {
       .hero {
         grid-template-columns: 1fr;
@@ -553,6 +685,21 @@
       .modal-buttons {
         flex-direction: column;
       }
+
+      .perfil-form {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-perfil-content {
+        margin: 5% auto;
+        width: 95%;
+        padding: 20px;
+        max-height: 85vh;
+      }
+
+      .perfil-actions {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -571,6 +718,7 @@
       </div>
       <nav class="nav">
         <a href="cliente.html" class="active"><i class="fas fa-home"></i>Home</a>
+        <a href="#" onclick="mostrarPerfil()"><i class="fas fa-user"></i>Meu Perfil</a>
         <a href="carrinho_cliente.html" class="cart-link">
           <i class="fas fa-shopping-cart"></i>Carrinho
           <div class="cart-badge" id="cartBadge" style="display: none;">0</div>
@@ -653,6 +801,99 @@
   <div id="toast" class="toast">
     <i class="fas fa-check-circle"></i>
     <span id="toastMessage">Operação realizada com sucesso!</span>
+  </div>
+
+  <!-- Modal de Perfil do Cliente -->
+  <div id="modal-perfil" class="modal-perfil">
+    <div class="modal-perfil-content">
+      <div class="modal-perfil-header">
+        <h2><i class="fas fa-user-edit"></i> Meu Perfil</h2>
+        <span class="close-perfil" onclick="fecharPerfil()">&times;</span>
+      </div>
+      <form id="form-perfil" class="perfil-form">
+        <div class="perfil-form-group">
+          <label for="perfilNome">Nome Completo *</label>
+          <input type="text" id="perfilNome" name="nome" required>
+        </div>
+        <div class="perfil-form-group">
+          <label for="perfilCPF">CPF *</label>
+          <input type="text" id="perfilCPF" name="cpf" required readonly>
+        </div>
+        <div class="perfil-form-group">
+          <label for="perfilEmail">E-mail *</label>
+          <input type="email" id="perfilEmail" name="email" required>
+        </div>
+        <div class="perfil-form-group">
+          <label for="perfilTelefone">Telefone *</label>
+          <input type="text" id="perfilTelefone" name="telefone" required>
+        </div>
+        <div class="perfil-form-group">
+          <label for="perfilDataNascimento">Data de Nascimento *</label>
+          <input type="date" id="perfilDataNascimento" name="dataNascimento" required>
+        </div>
+        <div class="perfil-form-group">
+          <label for="perfilCEP">CEP</label>
+          <input type="text" id="perfilCEP" name="cep" placeholder="00000-000">
+        </div>
+        <div class="perfil-form-group full-width">
+          <label for="perfilEndereco">Endereço</label>
+          <input type="text" id="perfilEndereco" name="endereco" placeholder="Rua, número">
+        </div>
+        <div class="perfil-form-group">
+          <label for="perfilBairro">Bairro</label>
+          <input type="text" id="perfilBairro" name="bairro">
+        </div>
+        <div class="perfil-form-group">
+          <label for="perfilCidade">Cidade</label>
+          <input type="text" id="perfilCidade" name="cidade">
+        </div>
+        <div class="perfil-form-group">
+          <label for="perfilEstado">Estado</label>
+          <select id="perfilEstado" name="estado">
+            <option value="">Selecione...</option>
+            <option value="AC">Acre</option>
+            <option value="AL">Alagoas</option>
+            <option value="AP">Amapá</option>
+            <option value="AM">Amazonas</option>
+            <option value="BA">Bahia</option>
+            <option value="CE">Ceará</option>
+            <option value="DF">Distrito Federal</option>
+            <option value="ES">Espírito Santo</option>
+            <option value="GO">Goiás</option>
+            <option value="MA">Maranhão</option>
+            <option value="MT">Mato Grosso</option>
+            <option value="MS">Mato Grosso do Sul</option>
+            <option value="MG">Minas Gerais</option>
+            <option value="PA">Pará</option>
+            <option value="PB">Paraíba</option>
+            <option value="PR">Paraná</option>
+            <option value="PE">Pernambuco</option>
+            <option value="PI">Piauí</option>
+            <option value="RJ">Rio de Janeiro</option>
+            <option value="RN">Rio Grande do Norte</option>
+            <option value="RS">Rio Grande do Sul</option>
+            <option value="RO">Rondônia</option>
+            <option value="RR">Roraima</option>
+            <option value="SC">Santa Catarina</option>
+            <option value="SP">São Paulo</option>
+            <option value="SE">Sergipe</option>
+            <option value="TO">Tocantins</option>
+          </select>
+        </div>
+        <div class="perfil-form-group full-width">
+          <label for="perfilObservacoes">Observações</label>
+          <input type="text" id="perfilObservacoes" name="observacoes" placeholder="Informações adicionais, preferências, etc.">
+        </div>
+        <div class="perfil-actions">
+          <button type="button" class="btn-cancelar-perfil" onclick="fecharPerfil()">
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+          <button type="submit" class="btn-salvar-perfil">
+            <i class="fas fa-save"></i> Salvar Alterações
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script>
@@ -903,6 +1144,7 @@
     window.onclick = function (event) {
       const modal = document.getElementById('modal');
       const modalProduto = document.getElementById('modalProduto');
+      const modalPerfil = document.getElementById('modal-perfil');
 
       if (event.target === modal) {
         fecharModal();
@@ -910,6 +1152,204 @@
       if (event.target === modalProduto) {
         fecharModalProduto();
       }
+      if (event.target === modalPerfil) {
+        fecharPerfil();
+      }
+    }
+
+    // =====================
+    // GERENCIAMENTO DE PERFIL
+    // =====================
+    let clienteLogado = null;
+
+    // Inicializar cliente logado (simulação)
+    document.addEventListener('DOMContentLoaded', function() {
+      inicializarClienteLogado();
+      
+      // Adicionar máscaras aos campos de perfil
+      document.getElementById('perfilCPF').addEventListener('input', mascaraCPF);
+      document.getElementById('perfilTelefone').addEventListener('input', mascaraTelefone);
+      document.getElementById('perfilCEP').addEventListener('input', mascaraCEP);
+    });
+
+    function inicializarClienteLogado() {
+      // Buscar cliente nos dados ou criar um cliente padrão
+      let clientes = JSON.parse(localStorage.getItem('clientes') || '[]');
+      
+      // Simular cliente logado (em uma aplicação real, isso viria da sessão/autenticação)
+      let clienteAtual = clientes.find(c => c.email === 'joao.silva@email.com');
+      
+      if (!clienteAtual) {
+        // Criar cliente padrão se não existir
+        clienteAtual = {
+          id: Date.now(),
+          nome: 'João Silva Santos',
+          cpf: '123.456.789-00',
+          email: 'joao.silva@email.com',
+          telefone: '(11) 99999-9999',
+          dataNascimento: '1990-01-01',
+          status: 'Ativo',
+          cep: '01234-567',
+          endereco: 'Rua das Flores, 123',
+          bairro: 'Centro',
+          cidade: 'São Paulo',
+          estado: 'SP',
+          observacoes: 'Cliente da loja física'
+        };
+        
+        clientes.push(clienteAtual);
+        localStorage.setItem('clientes', JSON.stringify(clientes));
+        console.log('Cliente padrão criado e salvo na lista de clientes');
+      }
+      
+      clienteLogado = clienteAtual;
+      atualizarNomeUsuario();
+      console.log('Cliente logado:', clienteLogado);
+    }
+
+    function atualizarNomeUsuario() {
+      if (clienteLogado) {
+        const nomeUsuario = clienteLogado.nome.split(' ')[0]; // Primeiro nome
+        document.querySelector('.user-welcome').textContent = `Olá, ${nomeUsuario}!`;
+        console.log('Nome do usuário atualizado para:', nomeUsuario);
+      }
+    }
+
+    // Função para debugar lista de clientes (remover em produção)
+    function verificarListaClientes() {
+      const clientes = JSON.parse(localStorage.getItem('clientes') || '[]');
+      console.log('Lista atual de clientes:', clientes);
+      console.log('Total de clientes:', clientes.length);
+      
+      if (clienteLogado) {
+        const clienteNaLista = clientes.find(c => c.id === clienteLogado.id);
+        console.log('Cliente logado encontrado na lista:', clienteNaLista);
+      }
+    }
+
+    function mostrarPerfil() {
+      console.log('Abrindo modal de perfil...');
+      
+      if (!clienteLogado) {
+        console.error('Cliente logado não encontrado');
+        mostrarToast('Erro ao carregar perfil do cliente', 'error');
+        return;
+      }
+      
+      console.log('Dados do cliente logado:', clienteLogado);
+      
+      // Preencher formulário com dados atuais
+      document.getElementById('perfilNome').value = clienteLogado.nome || '';
+      document.getElementById('perfilCPF').value = clienteLogado.cpf || '';
+      document.getElementById('perfilEmail').value = clienteLogado.email || '';
+      document.getElementById('perfilTelefone').value = clienteLogado.telefone || '';
+      document.getElementById('perfilDataNascimento').value = clienteLogado.dataNascimento || '';
+      document.getElementById('perfilCEP').value = clienteLogado.cep || '';
+      document.getElementById('perfilEndereco').value = clienteLogado.endereco || '';
+      document.getElementById('perfilBairro').value = clienteLogado.bairro || '';
+      document.getElementById('perfilCidade').value = clienteLogado.cidade || '';
+      document.getElementById('perfilEstado').value = clienteLogado.estado || '';
+      document.getElementById('perfilObservacoes').value = clienteLogado.observacoes || '';
+      
+      // Mostrar modal
+      const modal = document.getElementById('modal-perfil');
+      modal.style.display = 'block';
+      
+      // Garantir que o modal está no topo
+      setTimeout(() => {
+        modal.style.zIndex = '10000';
+      }, 10);
+      
+      console.log('Modal de perfil aberto');
+    }
+
+    function fecharPerfil() {
+      console.log('Fechando modal de perfil...');
+      document.getElementById('modal-perfil').style.display = 'none';
+    }
+
+    // Formulário de atualização de perfil
+    document.getElementById('form-perfil').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (!clienteLogado) {
+        mostrarToast('Erro: cliente não identificado', 'error');
+        return;
+      }
+      
+      const formData = new FormData(e.target);
+      const emailEditado = formData.get('email');
+      
+      // Buscar lista atual de clientes
+      let clientes = JSON.parse(localStorage.getItem('clientes') || '[]');
+      
+      // Verificar se email já existe em outro cliente
+      const emailExiste = clientes.some(c => c.email === emailEditado && c.id !== clienteLogado.id);
+      
+      if (emailExiste) {
+        mostrarToast('Este e-mail já está em uso por outro cliente', 'error');
+        return;
+      }
+      
+      // Atualizar dados do cliente
+      const clienteAtualizado = {
+        ...clienteLogado,
+        nome: formData.get('nome'),
+        email: formData.get('email'),
+        telefone: formData.get('telefone'),
+        dataNascimento: formData.get('dataNascimento'),
+        cep: formData.get('cep'),
+        endereco: formData.get('endereco'),
+        bairro: formData.get('bairro'),
+        cidade: formData.get('cidade'),
+        estado: formData.get('estado'),
+        observacoes: formData.get('observacoes')
+      };
+      
+      // Encontrar e atualizar o cliente na lista
+      const index = clientes.findIndex(c => c.id === clienteLogado.id);
+      if (index !== -1) {
+        clientes[index] = clienteAtualizado;
+        localStorage.setItem('clientes', JSON.stringify(clientes));
+        
+        // Atualizar referência do cliente logado
+        clienteLogado = clienteAtualizado;
+        atualizarNomeUsuario();
+        
+        fecharPerfil();
+        mostrarToast('Perfil atualizado com sucesso!', 'success');
+        
+        console.log('Cliente atualizado na lista:', clienteAtualizado);
+        console.log('Lista de clientes atualizada:', clientes);
+      } else {
+        mostrarToast('Erro ao atualizar perfil', 'error');
+        console.error('Cliente não encontrado na lista para atualização');
+      }
+    });
+
+    // Máscaras para campos de perfil
+    function mascaraCPF(e) {
+      e.target.value = e.target.value
+        .replace(/\D/g, '')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+        .replace(/(-\d{2})\d+?$/, '$1');
+    }
+
+    function mascaraTelefone(e) {
+      e.target.value = e.target.value
+        .replace(/\D/g, '')
+        .replace(/(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{5})(\d)/, '$1-$2')
+        .replace(/(-\d{4})\d+?$/, '$1');
+    }
+
+    function mascaraCEP(e) {
+      e.target.value = e.target.value
+        .replace(/\D/g, '')
+        .replace(/(\d{5})(\d)/, '$1-$2')
+        .replace(/(-\d{3})\d+?$/, '$1');
     }
   </script>
 </body>

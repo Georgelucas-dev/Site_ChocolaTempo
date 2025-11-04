@@ -480,8 +480,10 @@
       <nav class="nav">
         <a href="index.html"><i class="fas fa-home"></i> Home</a>
         <a href="cadastro_produto.html" class="active"><i class="fas fa-cookie"></i> Produtos</a>
-        <a href="cadastro_motoboy.html"><i class="fas fa-motorcycle"></i> Motoboys</a>
         <a href="cadastro_fornecedor.html"><i class="fas fa-truck"></i> Fornecedores</a>
+        <a href="cadastro_motoboy.html"><i class="fas fa-motorcycle"></i> Motoboys</a>
+        <a href="cadastro_cliente.html"><i class="fas fa-users"></i> Clientes</a>
+        <a href="cadastro_funcionario.html"><i class="fas fa-user-tie"></i> Funcionários</a>
         <a href="relatorios.html"><i class="fas fa-chart-line"></i> Relatórios</a>
         <a href="carrinho.html"><i class="fas fa-shopping-cart"></i> Carrinho</a>
       </nav>
@@ -498,6 +500,55 @@
         <button class="btn-primary" onclick="mostrarFormulario()">
           <i class="fas fa-plus"></i> Novo Produto
         </button>
+      </div>
+
+      <!-- Filtros de Busca -->
+      <div class="filtros-section" style="background: var(--white); padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); margin-bottom: 30px;">
+        <h3 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-search"></i> Filtros de Busca
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: end;">
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: 600; color: var(--primary);">Nome:</label>
+            <input type="text" id="filtroNome" placeholder="Buscar por nome..." style="padding: 10px; border: 2px solid #e1e5e9; border-radius: 6px; font-size: 14px;">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: 600; color: var(--primary);">Categoria:</label>
+            <select id="filtroCategoria" style="padding: 10px; border: 2px solid #e1e5e9; border-radius: 6px; font-size: 14px;">
+              <option value="Todos">Todas</option>
+              <option value="Trufas">Trufas</option>
+              <option value="Tabletes">Tabletes</option>
+              <option value="Bombons">Bombons</option>
+              <option value="Box">Box Presente</option>
+              <option value="Especiais">Chocolates Especiais</option>
+            </select>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: 600; color: var(--primary);">Faixa de Preço:</label>
+            <select id="filtroPreco" style="padding: 10px; border: 2px solid #e1e5e9; border-radius: 6px; font-size: 14px;">
+              <option value="Todos">Todos</option>
+              <option value="0-10">R$ 0 - R$ 10</option>
+              <option value="10-20">R$ 10 - R$ 20</option>
+              <option value="20-50">R$ 20 - R$ 50</option>
+              <option value="50-100">R$ 50 - R$ 100</option>
+              <option value="100-999">Acima de R$ 100</option>
+            </select>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="font-weight: 600; color: var(--primary);">Estoque:</label>
+            <select id="filtroEstoque" style="padding: 10px; border: 2px solid #e1e5e9; border-radius: 6px; font-size: 14px;">
+              <option value="Todos">Todos</option>
+              <option value="baixo">Estoque Baixo (≤10)</option>
+              <option value="medio">Estoque Médio (11-50)</option>
+              <option value="alto">Estoque Alto (>50)</option>
+            </select>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <button type="button" onclick="aplicarFiltrosProdutos()" style="background: var(--primary); color: var(--white); padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s ease;">
+              <i class="fas fa-search"></i> Filtrar
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Lista de Produtos Cadastrados -->
@@ -938,6 +989,70 @@
         alert('Produto excluído com sucesso!');
       }
     }
+
+    // Filtros de produtos
+    function aplicarFiltrosProdutos() {
+      const nome = document.getElementById('filtroNome').value.toLowerCase();
+      const categoria = document.getElementById('filtroCategoria').value;
+      const precoRange = document.getElementById('filtroPreco').value;
+      const estoqueRange = document.getElementById('filtroEstoque').value;
+      
+      let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+      
+      // Filtro por nome
+      if (nome) {
+        produtos = produtos.filter(p => p.nome.toLowerCase().includes(nome));
+      }
+      
+      // Filtro por categoria
+      if (categoria !== 'Todos') {
+        produtos = produtos.filter(p => p.categoria === categoria);
+      }
+      
+      // Filtro por preço
+      if (precoRange !== 'Todos') {
+        const [min, max] = precoRange.split('-').map(Number);
+        produtos = produtos.filter(p => p.preco >= min && (max === 999 ? true : p.preco <= max));
+      }
+      
+      // Filtro por estoque
+      if (estoqueRange !== 'Todos') {
+        switch(estoqueRange) {
+          case 'baixo':
+            produtos = produtos.filter(p => p.estoque <= 10);
+            break;
+          case 'medio':
+            produtos = produtos.filter(p => p.estoque > 10 && p.estoque <= 50);
+            break;
+          case 'alto':
+            produtos = produtos.filter(p => p.estoque > 50);
+            break;
+        }
+      }
+      
+      renderizarProdutosFiltrados(produtos);
+    }
+
+    function renderizarProdutosFiltrados(produtos) {
+      const lista = document.getElementById('lista-produtos');
+      lista.innerHTML = '';
+      
+      if (produtos.length === 0) {
+        lista.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 40px; grid-column: 1/-1;">Nenhum produto encontrado com os filtros aplicados.</p>';
+        return;
+      }
+      
+      produtos.forEach(produto => {
+        adicionarProdutoNaLista(produto);
+      });
+    }
+
+    // Limpar filtros ao pressionar Enter nos campos de busca
+    document.addEventListener('keyup', function(e) {
+      if (e.target.id === 'filtroNome' && e.key === 'Enter') {
+        aplicarFiltrosProdutos();
+      }
+    });
   </script>
 </body>
 </html>
